@@ -2,22 +2,59 @@
 
 # Global Dictionary of all valid Token Types
 TOKEN_TYPES = {
-    "int": "int",
-    "return": "return",
-    "switch": "switch",
-    "float": "float",
-    "while": "while",
-    "else": "else",
-    "case": "case",
-    "char": "char",
-    "for": "for",
-    "goto": "goto",
-    "unsigned": "unsigned",
-    "main": "main",
-    "break": "break",
-    "continue": "continue",
-    "void": "void"
+    # Keywords
+    "int"       : "int",
+    "return"    : "return",
+    "switch"    : "switch",
+    "float"     : "float",
+    "while"     : "while",
+    "else"      : "else",
+    "case"      : "case",
+    "char"      : "char",
+    "for"       : "for",
+    "goto"      : "goto",
+    "unsigned"  : "unsigned",
+    "main"      : "main",
+    "break"     : "break",
+    "continue"  : "continue",
+    "void"      : "void",
+
+    # Identifiers and Numbers
+    "identifier": "identifier",
+    "number"    : "number",
+
+    # Operators
+    "comment"       : r"//", # r".." indicates a raw string to avoid escape sequences being detected
+    "leftParen"     : r"\(",
+    "rightParen"    : r"\)",
+    "leftBracket"   : r"\[",
+    "rightBracket"  : r"\]",
+    "leftBrace"     : r"\{",
+    "rightBrace"    : r"\}",
+    "dot"           : r"\.",
+    "plus"          : r"\+",
+    "minus"         : r"\-",
+    "multiply"      : r"\*",
+    "divide"        : r"\/",
+    "modulus"       : r"%",
+    "lessThan"      : r"<",
+    "greaterThan"   : r">",
+    "assignment"    : r"=",
+    "semicolon"     : r";",
+    "comma"         : r",",
+    "increment"     : r"\+\+",
+    "decrement"     : r"\-\-",
+    "lessThanEq"    : r"<=",
+    "greaterThanEq" : r">=",
+    "logicEqual"    : r"==",
+    "logicAnd"      : r"&&",
+    "logicOr"       : r"\|\|",
+    "logicNot"      : r"!",
+    "bitAnd"        : r"&",
+    "bitOr"         : r"\|",
 }
+
+
 class Token:
     """
     Represents a lexical token.
@@ -76,7 +113,7 @@ class Lexer:
     def deterministic_finite_automata(self, current_line) -> str:
         """
         Processes current line of code and returns a list of token_type attribute grabbed upon each token's creation.
-        """a
+        """
         lexeme_sequence = []
         lexeme_sequence.append(current_line[0])
         char_index = 0
@@ -104,10 +141,6 @@ class Lexer:
                 else:
                     self._tokenStream.append(Token(type_buffer, lexeme_sequence))
 
-                # Reset states for next Lexeme outer loop check
-                type_buffer = None
-                lexeme_sequence.clear()
-
 
             # if initial_char is a number(0-9) then keep looping until a non number is detected. Then assign the lexeme
             # a number token.
@@ -128,8 +161,17 @@ class Lexer:
             # exception to this is if a double forward slash operator is detected //. this means that the token assigned
             # will be a comment, the // and all characters that comme after the // will be a valid part of the comment
             # which doesnt end until the next newline character.
+            else:
+                # first char will always be an operator
+                type_buffer = TOKEN_TYPES.get(lexeme_sequence[0])
+                if False:
+                    break
 
+            # Setup for next loop, ie next lexeme
             char_index += 1
+            lexeme_sequence.clear()
+            lexeme_sequence.append([char_index])
+            type_buffer = None
 
         return 0
 
