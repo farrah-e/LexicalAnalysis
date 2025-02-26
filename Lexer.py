@@ -82,33 +82,46 @@ class Lexer:
         self.__source_code = source_code
         self._tokenStream = []
 
-    # F
     def set_source_code(self, sourceCode=""):
         """
         Sets atrribute _source_code
         """
         self.sourceCode = sourceCode
 
-
+    
+    #######################################################################################################ff
+    # These Methods All Need Work
     def input_file(self, fileName=""):
         """
         Reads a user specified text file, assigns it to _source_code.
         """
+        
+    def scan_line(self, *code_copy) -> str:
+        """
+        Takes in a string pointer, returns a string of chars before first newline character
+        The returned string should be deleted from the passed in string argument
+        """
+
     def run_lexer(self) -> None:
         """
         Creates a token stream from the source code. The code is scanned left-to-right, line-by-line and uses
         a DFA to build valid lexems and assign cooresponding tokens.
         """
-        # Break _source_code into a list of str, one str per newline
-        line_list = []
 
-        # Loops for each newline in _source_code
-        for current_line in line_list:
-            # Feed current line to the DFA
+        # Create local copy of the source code, so we can perform scanning
+        raw_code = self.__source_code
+
+        # until source code is empty
+        while raw_code:
+
+            # Scan and delete current line, feed it to DFA
+            current_line = self.scan_line(*raw_code)
             curr_line_tokens = self.deterministic_finite_automata(current_line)
 
-        # Add token line to the output file
-
+            # Output
+            # -- we need to print the token stream line by line to an output file
+    ###################################################################################################
+    
     def deterministic_finite_automata(self, current_line):
         """
         Processes current line of code and adds valid tokens to the token stream, one lexeme at a time.
